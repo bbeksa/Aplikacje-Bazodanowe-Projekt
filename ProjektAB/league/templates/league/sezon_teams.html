@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sezony</title>
+
+{% load static %}
+{% load league_extras %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'league/listyle.css' %}">
+
+</head>
+<body>
+
+<div class="nav">
+  <ul>
+    <li class="nav"><a class="active" href="{% url 'league:league_sezons' sezon.league.id %}">Powrót</a></li>
+    <li class="nav"><a href="http://127.0.0.1:8000/">Home</a></li>
+    <li class="nav"><a href="http://127.0.0.1:8000/league/">Ligi</a></li>
+    <li style="float:right"><a href="{% url 'logout' %}">Wyloguj sie</a></li>
+  </ul>
+</div>
+
+ {% if request.user|has_group:"Admin" %}  
+   <a style="position: absolute; left: 2px; top: 80px" href="{% url 'league:sezon_update' sezon.id %}"><button>Edytuj sezon</button></a> 
+   <a style="position: absolute; left: 120px; top: 80px" href="{% url 'league:sezon_delete' sezon.id %}"><button>Usuń sezon</button></a> 
+ {% endif %}
+
+<h1>{{ sezon.league.name }} {{ sezon.number }}
+ {% if request.user|has_group:"Admin" %}  
+  (ID= {{ sezon.id }})
+ {% endif %}
+</h1>
+
+<h2 style="position: absolute; left: 220px; top: 190px">Drużyny według rankingu:</h2>
+
+  {% if request.user|has_group:"Admin" %}  
+    <a style="position: absolute; left: 50px; top: 220px" href="{% url 'league:team_upload' %}"><button>Dodaj nową drużynę</button></a> 
+  {% endif %}
+
+<ul class="ligi" style="line-height: 250%; font-size: large; position: absolute; left: 170px; top: 250px; width:25%;">
+ {% for ateam in teams %}
+  {% for team in sezon.team_set.all %}
+   {% if ateam.id == team.id %}
+     <li class="ligi" style="margin: 10px 0;"><a href="{% url 'league:team' team.id %}"> {% if team.classification != None %}{{ team.classification.ranking_position }}.  {% endif %} {{ team.name }} </a></li>
+   {% endif %}
+  {% endfor %}
+ {% endfor %}
+</ul>
+
+
+<h3 style="position: absolute; right: 268px; top: 190px">Historia gier:</h3>
+
+  {% if request.user|has_group:"Admin" %}  
+    <a style="position: absolute; right: 100px; top: 220px" href="{% url 'league:game_upload' %}"><button>Dodaj grę</button></a> 
+  {% endif %}
+
+{% if game_list %}
+<div style="position: absolute; right: 190px; top: 250px; ">
+
+<div style="position: relative">
+ <ul class="ligi" style="width:120%;">
+  {% for game in game_list %}
+    {% if sezon.id == game.sezon.id %}
+       <li style="margin: 10px 0;"><a><div style="font-size: large; "> <b>{{ game.winner.name }}</b> vs {{ game.loser.name }} </div><br />
+       Data: {{ game.get_event_date }}&nbsp;&nbsp;  Czas trwania(min): {{ game.time }} </a></li>
+        {% if request.user|has_group:"Admin" %}  
+    	   <a href="{% url 'league:game_update' game.id %}"><button>Edytuj grę</button></a> 
+    	   <a href="{% url 'league:game_delete' game.id %}"><button>Usuń grę</button></a> 
+ 	{% endif %}
+    {% endif %}
+  {% endfor %}
+ </ul>
+</div>
+{% else %}
+
+ <h2 style="position: absolute; right: 220px; top: 250px">Brak gier w historii</h2>
+
+{% endif %}
+
+</body>
+</html>

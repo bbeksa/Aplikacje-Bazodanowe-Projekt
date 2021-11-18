@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sezony</title>
+
+{% load static %}
+{% load league_extras %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'league/listyle.css' %}">
+
+</head>
+<body>
+
+<ul>
+  <li class="nav"><a class="active" href="http://127.0.0.1:8000/league/">Powrót</a></li>
+  <li class="nav"><a  href="http://127.0.0.1:8000/">Home</a></li>
+  <li style="float:right"><a href="{% url 'logout' %}">Wyloguj sie</a></li>
+</ul>
+
+ {% if request.user|has_group:"Admin" %}  
+   <a style="position: absolute; left: 2px; top: 80px" href="{% url 'league:league_update' league.id %}"><button>Edytuj ligę</button></a> 
+   <a style="position: absolute; left: 120px; top: 80px" href="{% url 'league:league_delete' league.id %}"><button>Usuń ligę</button></a> 
+ {% endif %}
+
+<h1>{{ league.name }}
+ {% if request.user|has_group:"Admin" %}  
+  (ID= {{ league.id }})
+ {% endif %}
+</h1>
+
+{% if league.league_logo != None %}
+  <img src="{{ league.league_logo.url }}" style="vertical-align:middle">
+{% endif %}
+
+<h1>sezony:</h1>
+
+  {% if request.user|has_group:"Admin" %}  
+    <a href="{% url 'league:sezon_upload' %}"><button>Dodaj nowy sezon</button></a> 
+  {% endif %}
+
+<ul class="ligi">
+{% for sezon in league.sezon_set.all %}
+    <li><a href="{% url 'league:sezon_teams' sezon.id %}">{{ sezon.number }} </a></li>
+{% endfor %}
+</ul>
+
+</body>
+</html>

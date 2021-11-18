@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Dodaj sezon</title>
+
+<style>
+body {
+  background-color: black;
+  text-align: left;
+  color: white;
+}
+
+</style>
+
+</head>
+<body>
+ <h2 style=" text-align: center;">Dodaj nowy sezon</h2>
+<div style="width: 400px; margin-right: auto; margin-left: auto;">
+	<form method = "post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit">Zatwierdź</button>
+	</form>
+</div>
+</body>
+</html>

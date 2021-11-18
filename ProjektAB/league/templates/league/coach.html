@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Coach</title>
+
+{% load static %}
+{% load league_extras %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'league/playerstyle.css' %}">
+
+</head>
+<body>
+
+<ul>
+  <li class="nav"><a class="active" href="{{request.META.HTTP_REFERER}}">Powrót</a></li>
+  <li class="nav"><a href="http://127.0.0.1:8000/">Home</a></li>
+  <li class="nav"><a href="http://127.0.0.1:8000/league/">Ligi</a></li>
+  <li style="float:right"><a href="{% url 'logout' %}">Wyloguj sie</a></li>
+</ul>
+
+ {% if request.user|has_group:"Admin" %}  
+   <a style="position: absolute; left: 2px; top: 80px" href="{% url 'league:coach_update' coach.id %}"><button>Edytuj trenera</button></a> 
+   <a style="position: absolute; left: 120px; top: 80px" href="{% url 'league:coach_delete' coach.id %}"><button>Usuń trenera</button></a> 
+   <h2 style="position: absolute; left: 250px; top: 60px">ID= {{ coach.id }}</h2>
+ {% endif %}
+
+{% if coach.coach_Img %}
+  <img src="{{ coach.coach_Img.url }}" width="375 height="300" style="position: absolute; left: 40px; top: 100px">
+{% endif %}
+
+<h2 style="position: absolute; left: 30px; top: 460px">Imię: &nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; {{ coach.first_name }}</h2>
+<h2 style="position: absolute; left: 30px; top: 520px">Nazwisko: &emsp;&emsp;&emsp;&emsp; {{ coach.last_name }}</h2>
+<h2 style="position: absolute; left: 30px; top: 580px">Nickname: &emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp; {{ coach.nick }}</h2>
+
+<h2 style="position: absolute; left: 950px; top: 280px"> Historia Drużyn: </h2>
+
+<div style="position: absolute; left: 800px; top: 360px">
+ <ul class="ligi" style="width:120%;">
+  {% for team in team_list %}
+   {% for acoach in team.coach.all %}
+    {% if coach.id == acoach.id %}
+       <li style="margin: 10px 0;"><a href="{% url 'league:team' team.id %}"><div style="font-size: large; "> <b>{{ team.name }} ({{ team.leagueSezon.league.name}}: {{ team.leagueSezon.number }})</b></div><br />
+    {% endif %}
+   {% endfor %}
+  {% endfor %}
+ </ul>
+</div>
+
+</body>
+</html>

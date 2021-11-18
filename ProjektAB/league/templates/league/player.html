@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Player</title>
+
+{% load static %}
+{% load league_extras %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'league/playerstyle.css' %}">
+
+</head>
+<body>
+
+<ul>
+  <li class="nav"><a class="active" href="{{request.META.HTTP_REFERER}}">Powrót</a></li>
+  <li class="nav"><a href="http://127.0.0.1:8000/">Home</a></li>
+  <li class="nav"><a href="http://127.0.0.1:8000/league/">Ligi</a></li>
+  <li style="float:right"><a href="{% url 'logout' %}">Wyloguj sie</a></li>
+</ul>
+
+ {% if request.user|has_group:"Admin" %}  
+   <a style="position: absolute; left: 2px; top: 80px" href="{% url 'league:player_update' player.id %}"><button>Edytuj gracza</button></a> 
+   <a style="position: absolute; left: 120px; top: 80px" href="{% url 'league:player_delete' player.id %}"><button>Usuń gracza</button></a> 
+    <h2 style="position: absolute; left: 250px; top: 60px">ID= {{ player.id }}</h2>
+ {% endif %}
+
+{% if player.player_Img %}
+  <img src="{{ player.player_Img.url }}" width="375 height="300" style="position: absolute; left: 50px; top: 120px">
+{% endif %}
+
+<h2 style="position: absolute; left: 30px; top: 460px">Imię: &nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; {{ player.first_name }}</h2>
+<h2 style="position: absolute; left: 30px; top: 520px">Nazwisko: &emsp;&emsp;&emsp;&emsp; {{ player.last_name }}</h2>
+<h2 style="position: absolute; left: 30px; top: 580px">Nickname: &emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp; {{ player.nick }}</h2>
+<h2 style="position: absolute; left: 30px; top: 640px">Pozycja: &emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp; 
+ {% if player.current_team.top.id == player.id %} Top Laner </h2> {% endif %}
+ {% if player.current_team.jung.id == player.id %} Jungler </h2> {% endif %}
+ {% if player.current_team.mid.id == player.id %} Mid Laner </h2> {% endif %}
+ {% if player.current_team.adc.id == player.id %} Bot Laner </h2> {% endif %}
+ {% if player.current_team.supp.id == player.id %} Support </h2> {% endif %}
+<h2 style="position: absolute; left: 30px; top: 700px">Kraj pochodzenia: &nbsp;&nbsp; {{ player.CountryofBirth }}</h2>
+<h2 style="position: absolute; left: 30px; top: 760px">Wiek: &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; {{ player.age }} lat </h2>
+
+{% if player.current_team != None %}
+<div style="position: absolute; left: 600px; top: 120px"
+  <h2>Aktualna drużyna:</h2>
+  <h2>{{ player.current_team.name }}</h2>
+  {% if player.current_team.team_logo %}
+    <img src="{{ player.current_team.team_logo.url }}" width="150" height="150" style="vertical-align:middle">
+  {% endif %}
+{% endif %}
+</div>
+
+  {% if request.user|has_group:"Admin" %}  
+    <a style="position: absolute; left: 620px; top: 400px" href="{% url 'league:teamhistory_upload' %}"><button>Dodaj byłą drużynę</button></a> 
+  {% endif %}
+
+<h2 style="position: absolute; left: 600px; top: 420px">Historia drużyn:</h3>
+{% if history_list %}
+
+<div style="position: absolute; left: 450px; top: 480px; ">
+
+<div>
+ <ul class="ligi" style="width:50%;">
+  {% for history in history_list %}
+    {% if player.id == history.player.id %}
+       <li style="margin: 10px 0;"><a><div style="font-size: large; "> <b>{{ history.team.name }}</b></div><br />
+       Data dołączenia: {{ history.get_join_date }}&nbsp;&nbsp;  Data opuszczenia: {{ history.get_leave_date }} </a></li>
+    {% endif %}
+
+  {% endfor %}
+ </ul>
+</div>
+</div>
+{% else %}
+
+<h2 style="position: absolute; left: 605px; top: 480px"> Nic tu nie ma :( </h3>
+
+{% endif %}
+
+  {% if request.user|has_group:"Admin" %}  
+    <a style="position: absolute; right: 200px; top: 400px" href="{% url 'league:pentakill_upload' %}"><button>Dodaj Pentakilla</button></a> 
+  {% endif %}
+
+<h2 style="position: absolute; right: 200px; top: 420px">Pentakille:</h3>
+{% if penta_list %}
+
+<div style="position: absolute; right: 70px; top: 480px; ">
+
+<div>
+ <ul class="ligi" style="width:90%;">
+  {% for penta in penta_list %}
+    {% if player.id == penta.player.id %}
+       <li style="margin: 10px 0;"><a><div style="font-size: large"> {{ penta.game.loser.name }} vs <b>{{ penta.game.winner.name }}</b> | minuta: {{ penta.minute }}</div> <br />
+       Data: {{ penta.game.get_event_date }}&nbsp;&nbsp;  Czas trwania(min): {{ penta.game.time }} </a></li>
+    {% endif %}
+
+  {% endfor %}
+ </ul>
+</div>
+</div>
+{% else %}
+
+<h2 style="position: absolute; right: 180px; top: 480px"> Nic tu nie ma :( </h3>
+
+{% endif %}
+
+
+</body>
+</html>

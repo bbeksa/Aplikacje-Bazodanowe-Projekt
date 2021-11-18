@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Usuń sezon</title>
+
+<style>
+body {
+  background-color: black;
+  text-align: center;
+  color: white;
+}
+
+</style>
+
+</head>
+<body>
+    <article>
+	<h1 style=" text-align: center;"> Czy na pewno chcesz usunąć sezon{{ sezon.league.name }}: {{ sezon.number }}(ID={{ sezon.id }})? </h1>
+	<form method = "post">
+		{% csrf_token %}
+		<button type="submit">Usuń</button>
+	</form>
+    </article>
+</body>
+</html>

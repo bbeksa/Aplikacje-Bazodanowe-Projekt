@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Usuń trenera</title>
+
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'league/deletestyle.css' %}">
+
+
+</head>
+<body>
+    <article>
+	<h1> Czy na pewno chcesz usunąć trenera "{{ coach.nick }}"(ID={{ coach.id }})? </h1>
+	<form method = "post">
+		{% csrf_token %}
+		<button type="submit">Usuń</button>
+	</form>
+    </article>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ligi</title>
+
+{% load static %}
+{% load league_extras %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'league/listyle.css' %}">
+
+</head>
+<body>
+
+<ul>
+  <li class="nav"><a href="http://127.0.0.1:8000/">Home</a></li>
+  <li style="float:right"><a href="{% url 'logout' %}">Wyloguj sie</a></li>
+</ul>
+
+<h1>Lista lig:</h1>
+
+  {% if request.user|has_group:"Admin" %}  
+    <a href="{% url 'league:league_upload' %}"><button>Dodaj ligę</button></a> 
+  {% endif %}
+
+<ul class="ligi">
+    {% for league in league_list %}
+        <li><a href="{% url 'league:league_sezons' league.id %}">{{ league.name }} ({{ league.location }})</a></li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

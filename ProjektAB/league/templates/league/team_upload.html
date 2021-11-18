@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Dodaj drużynę</title>
+
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'league/uploadstyle.css' %}">
+
+</head>
+<body>
+<h2 style=" text-align: center;">Dodaj drużynę</h2>
+<div class="up">
+	<form method = "post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit">Zatwierdź</button>
+	</form>
+</div>
+
+<a style="position: absolute; left: 245px; top: 320px" href="{% url 'league:player_upload' %}" target="popup"><button>Dodaj nowego gracza</button></a> 
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Team</title>
+
+{% load static %}
+{% load league_extras %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'league/listyle.css' %}">
+</head>
+<body>
+
+<div class="nav">
+  <ul>
+    <li class="nav"><a class="active" href="{{request.META.HTTP_REFERER}}">Powrót</a></li>
+    <li class="nav"><a href="http://127.0.0.1:8000/">Home</a></li>
+    <li class="nav"><a href="http://127.0.0.1:8000/league/">Ligi</a></li>
+    <li style="float:right"><a href="{% url 'logout' %}">Wyloguj sie</a></li>
+  </ul>
+</div>
+
+ {% if request.user|has_group:"Admin" %}  
+   <a style="position: absolute; left: 2px; top: 80px" href="{% url 'league:team_update' team.id %}"><button>Edytuj Drużynę</button></a> 
+   <a style="position: absolute; left: 120px; top: 80px" href="{% url 'league:team_delete' team.id %}"><button>Usuń Drużynę</button></a> 
+ {% endif %}
+
+
+<div>
+<h1>{{ team.name }}
+{% if request.user|has_group:"Admin" %}  
+  (ID= {{ team.id }})
+{% endif %}
+{% if team.team_logo %}
+  <img src="{{ team.team_logo.url }}" width="300" height="300" style="vertical-align:middle">
+{% endif %}
+</h1>
+</div>
+
+<h2 style="position: absolute; left: 445px; top: 290px">Gracze:</h2>
+
+  {% if request.user|has_group:"Admin" %}  
+    <a style="position: absolute; left: 245px; top: 320px" href="{% url 'league:player_upload' %}"><button>Dodaj nowego gracza</button></a> 
+  {% endif %}
+
+<h2 style="position: absolute; left: 30px; top: 360px">Top Laner:</h2> 
+  {% if request.user|has_group:"Admin" %}  
+   {% if team.top.id != None %}
+    <a style="position: absolute; left: 2px; top: 410px" href="{% url 'league:player_update' team.top.id %}"><button>Edytuj gracza</button></a> 
+    <a style="position: absolute; left: 100px; top: 410px" href="{% url 'league:player_delete' team.top.id %}"><button>Usuń gracza</button></a> 
+   {% endif %}
+  {% endif %}
+<h2 style="position: absolute; left: 30px; top: 430px">Jungler:</h2>
+  {% if request.user|has_group:"Admin" %}  
+   {% if team.jung.id != None %}
+    <a style="position: absolute; left: 2px; top: 480px" href="{% url 'league:player_update' team.jung.id %}"><button>Edytuj gracza</button></a> 
+    <a style="position: absolute; left: 100px; top: 480px" href="{% url 'league:player_delete' team.jung.id %}"><button>Usuń gracza</button></a> 
+   {% endif %}
+  {% endif %}
+<h2 style="position: absolute; left: 30px; top: 508px">Mid laner:</h2>
+  {% if request.user|has_group:"Admin" %}  
+   {% if team.mid.id != None %}
+    <a style="position: absolute; left: 2px; top: 558px" href="{% url 'league:player_update' team.mid.id %}"><button>Edytuj gracza</button></a> 
+    <a style="position: absolute; left: 100px; top: 558px" href="{% url 'league:player_delete' team.mid.id %}"><button>Usuń gracza</button></a> 
+   {% endif %}
+  {% endif %}
+<h2 style="position: absolute; left: 30px; top: 582px">Bot Laner:</h2>
+  {% if request.user|has_group:"Admin" %}  
+   {% if team.adc.id != None %}
+    <a style="position: absolute; left: 2px; top: 632px" href="{% url 'league:player_update' team.adc.id %}"><button>Edytuj gracza</button></a> 
+    <a style="position: absolute; left: 100px; top: 632px" href="{% url 'league:player_delete' team.adc.id %}"><button>Usuń gracza</button></a> 
+   {% endif %}
+  {% endif %}
+<h2 style="position: absolute; left: 30px; top: 658px">Support:</h2>
+  {% if request.user|has_group:"Admin" %}  
+   {% if team.supp.id != None %}
+    <a style="position: absolute; left: 2px; top: 708px" href="{% url 'league:player_update' team.supp.id %}"><button>Edytuj gracza</button></a> 
+    <a style="position: absolute; left: 100px; top: 708px" href="{% url 'league:player_delete' team.supp.id %}"><button>Usuń gracza</button></a> 
+   {% endif %}
+  {% endif %}
+
+
+ <ul class="ligi" style="position: absolute; left: 190px; top: 350px; line-height: 250%; font-size: large">
+  <li> {% if team.top.id != None %} 
+        <a href="{% url 'league:player' team.top.id %}"> {{ team.top.first_name }} "{{ team.top.nick }}" {{ team.top.last_name }}  {% if request.user|has_group:"Admin" %}(ID= {{ team.top.id }}){% endif %}</a> 
+       {% else %} <a>Nie dodano</a>
+       {% endif %}</li>
+  <li> {% if team.jung.id != None %} 
+        <a href="{% url 'league:player' team.jung.id %}"> {{ team.jung.first_name }} "{{ team.jung.nick }}" {{ team.jung.last_name }} {% if request.user|has_group:"Admin" %}(ID= {{ team.jung.id }}){% endif %}</a>
+       {% else %} <a>Nie dodano</a>
+       {% endif %}</li>
+  <li> {% if team.mid.id != None %} 
+        <a href="{% url 'league:player' team.mid.id %}"> {{ team.mid.first_name }} "{{ team.mid.nick }}" {{ team.mid.last_name }} {% if request.user|has_group:"Admin" %}(ID= {{ team.mid.id }}){% endif %}</a>
+       {% else %} <a>Nie dodano</a>
+       {% endif %}</li>
+  <li> {% if team.adc.id != None %} 
+        <a href="{% url 'league:player' team.adc.id %}"> {{ team.adc.first_name }} "{{ team.adc.nick }}" {{ team.adc.last_name }} {% if request.user|has_group:"Admin" %}(ID= {{ team.adc.id }}){% endif %}</a>
+       {% else %} <a>Nie dodano</a>
+       {% endif %}</li>
+  <li> {% if team.adc.id != None %} 
+        <a href="{% url 'league:player' team.supp.id %}"> {{ team.supp.first_name }} "{{ team.supp.nick }}" {{ team.supp.last_name }} {% if request.user|has_group:"Admin" %}(ID= {{ team.supp.id }}){% endif %}</a>
+       {% else %} <a>Nie dodano</a>
+       {% endif %}</li>
+ </ul>
+
+
+<h2 style="position: absolute; left: 440px; top: 800px">Trenerzy:</h2>
+
+  {% if request.user|has_group:"Admin" %}  
+    <a style="position: absolute; left: 240px; top: 830px" href="{% url 'league:coach_upload' %}"><button>Dodaj nowego trenera</button></a> 
+  {% endif %}
+
+<ul class="ligi" style="position: absolute; left: 190px; top: 860px">
+
+ {% for coach in team.coach.all %}
+    <li><a href="{% url 'league:coach' coach.id %}">{{ coach.first_name }} "{{ coach.nick }}" {{ coach.last_name }} {% if request.user|has_group:"Admin" %}(ID= {{ coach.id }}){% endif %}</a></li>
+   {% if request.user|has_group:"Admin" %}  
+    <a href="{% url 'league:coach_update' coach.id %}"><button>Edytuj Trenera</button></a> 
+    <a href="{% url 'league:coach_delete' coach.id %}"><button>Usuń Trenera</button></a> 
+   {% endif %}
+ {% endfor %}   
+</ul>
+
+  {% if request.user|has_group:"Admin" %}  
+    <a style="position: absolute; right: 100px; top: 270px" href="{% url 'league:game_upload' %}"><button>Dodaj grę</button></a> 
+  {% endif %}
+
+{% if game_list %}
+
+<h3 style="position: absolute; right: 198px; top: 250px">Historia gier:</h3>
+<div style="position: absolute; right: 90px; top: 300px; ">
+
+<div style="position: relative">
+ <h3 style="position: relative; left: 20px;">Wygrane:</h3>
+ <ul class="ligi" style="width:105%;">
+  {% for game in game_list %}
+    {% if team.id == game.winner.id %}
+       <li style="margin: 10px 0;"><a><div style="font-size: large; "> <b>{{ game.winner.name }}</b> vs {{ game.loser.name }} </div> {% if request.user|has_group:"Admin" %}(ID= {{ game.id }}){% endif %}<br />
+       Data: {{ game.get_event_date }}&nbsp;&nbsp;  Czas trwania(min): {{ game.time }} </a></li>
+        {% if request.user|has_group:"Admin" %}  
+    	   <a href="{% url 'league:game_update' game.id %}"><button>Edytuj grę</button></a> 
+    	   <a href="{% url 'league:game_delete' game.id %}"><button>Usuń grę</button></a> 
+ 	{% endif %}
+    {% endif %}
+
+  {% endfor %}
+ </ul>
+</div>
+
+<div style="position: relative">
+ <h3 style="position: relative; left: 20px;">Przegrane:</h3>
+ <ul class="ligi" style="width:105%;">
+  {% for game in game_list %}
+    {% if team.id == game.loser.id %}
+       <li style="margin: 10px 0;"><a><div style="font-size: large"> {{ game.loser.name }} vs <b>{{ game.winner.name }}</b></div> {% if request.user|has_group:"Admin" %}(ID= {{ game.id }}){% endif %} <br />
+       Data: {{ game.get_event_date }}&nbsp;&nbsp;  Czas trwania(min): {{ game.time }} </a></li>
+         {% if request.user|has_group:"Admin" %}  
+    	   <a href="{% url 'league:game_update' game.id %}"><button>Edytuj grę</button></a> 
+    	   <a href="{% url 'league:game_delete' game.id %}"><button>Usuń grę</button></a> 
+ 	 {% endif %}
+    {% endif %}
+  {% endfor %}
+ </ul>
+</div>
+
+</div>
+
+{% endif %}
+
+</body>
+</html>
