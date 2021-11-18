@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+
+<style>
+body {
+  background-color: black;
+  text-align: center;
+  color: white;
+}
+
+</style>
+</head>
+<body>
+
+<h2 style=" text-align: center;">Zaloguj się</h2>
+<div style="width: 400px; margin-right: auto; margin-left: auto;">
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Zaloguj się</button>
+</form>
+  <a href="{% url 'password_reset' %}">
+     <button>Reset hasła</button><br /> <br />
+  </a>
+</div>
+
+<div style="width: 400px; margin-right: auto; margin-left: auto;">
+<h2 style=" text-align: center;">Nie masz jeszcze konta?</h2> 
+  <a href="http://127.0.0.1:8000/league/signup/">
+     <button>Zarejestruj się</button>
+  </a>
+</div>
+</body>
+</html>
+
+
+
+
